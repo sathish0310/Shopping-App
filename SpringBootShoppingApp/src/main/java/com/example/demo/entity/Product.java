@@ -2,8 +2,12 @@ package com.example.demo.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -12,10 +16,10 @@ import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 
 @Entity
-@Table(name="product")
+@Table(name = "product")
 @Data
 public class Product {
-	
+
 	@Id
 	@Min(value = 1, message = "Product ID must be greater than 0")
 	private int productId;
@@ -30,7 +34,12 @@ public class Product {
 	private String productCategory;
 
 	@NotNull(message = "Product validity date is mandatory")
-	@PastOrPresent(message = "Product validity date must be in the past or present")
+	
 	private Date productValidity;
+
+	@ManyToOne
+	@JoinColumn(name = "cart_id", referencedColumnName = "cartId")
+	@JsonBackReference
+	private Cart cart;
 
 }
